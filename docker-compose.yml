@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # Backend API Service
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: magic-english-backend
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/magic_english.db
+      - Ollama__Url=http://ollama:11434
+      - Ollama__Model=llama2
+    volumes:
+      - ./Backend/data:/app/data
+    depends_on:
+      - ollama
+    networks:
+      - magic-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Web Service
+  frontend:
+    build:
+      context: ./fontend
+      dockerfile: Dockerfile
+    container_name: magic-english-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - magic-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  # Ollama AI Service
+  ollama:
+    image: ollama/ollama:latest
+    container_name: magic-english-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    networks:
+      - magic-network
+    restart: unless-stopped
+    # Optional: Uncomment if you want to pull a model on startup
+    # command: ollama pull llama2
+
+volumes:
+  ollama_data:
+    driver: local
+
+networks:
+  magic-network:
+    driver: bridge

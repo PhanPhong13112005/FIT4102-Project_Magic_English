@@ -1,7 +1,7 @@
+import 'package:fit4102_project_magic_english/providers/vocabulary_provider.dart';
+import 'package:fit4102_project_magic_english/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fontend/providers/vocabulary_provider.dart';
-import 'package:fontend/theme/app_theme.dart';
 
 class MagicVocabScreen extends StatefulWidget {
   const MagicVocabScreen({Key? key}) : super(key: key);

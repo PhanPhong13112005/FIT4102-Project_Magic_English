@@ -1,7 +1,7 @@
+import 'package:fit4102_project_magic_english/providers/stats_provider.dart';
+import 'package:fit4102_project_magic_english/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fontend/providers/stats_provider.dart';
-import 'package:fontend/theme/app_theme.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({Key? key}) : super(key: key);

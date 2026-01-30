@@ -1,8 +1,8 @@
+import 'package:fit4102_project_magic_english/providers/auth_provider.dart';
+import 'package:fit4102_project_magic_english/providers/stats_provider.dart';
+import 'package:fit4102_project_magic_english/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fontend/theme/app_theme.dart';
-import 'package:fontend/providers/stats_provider.dart';
-import 'package:fontend/providers/auth_provider.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);

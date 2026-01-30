@@ -1,7 +1,7 @@
+import 'package:fit4102_project_magic_english/models/auth_response.dart';
+import 'package:fit4102_project_magic_english/services/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fontend/services/api_client.dart';
-import 'package:fontend/models/auth_response.dart';
 
 class AuthProvider extends ChangeNotifier {
   AuthResponseData? _currentUser;

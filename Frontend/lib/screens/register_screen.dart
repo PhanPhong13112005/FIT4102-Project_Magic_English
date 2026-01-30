@@ -1,7 +1,7 @@
+import 'package:fit4102_project_magic_english/providers/auth_provider.dart';
+import 'package:fit4102_project_magic_english/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fontend/providers/auth_provider.dart';
-import 'package:fontend/theme/app_theme.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);

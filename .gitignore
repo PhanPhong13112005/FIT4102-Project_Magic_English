@@ -1,0 +1,57 @@
+# Backend (.NET)
+Backend/bin/
+Backend/obj/
+Backend/.vs/
+Backend/.vscode/
+Backend/*.user
+Backend/*.suo
+Backend/*.sln.iml
+Backend/appsettings.*.json
+Backend/data/
+Backend/magic_english.db
+
+# Frontend (Flutter)
+fontend/build/
+fontend/.dart_tool/
+fontend/.flutter-plugins
+fontend/.packages
+fontend/pubspec.lock
+fontend/coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Docker
+docker-compose.override.yml
+
+# Backups
+backups/
+*.db.bak
+*.db.backup
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (if web)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Ollama
+ollama/
+ollama_data/

@@ -1,7 +1,7 @@
+import 'package:fit4102_project_magic_english/providers/writing_provider.dart';
+import 'package:fit4102_project_magic_english/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fontend/providers/writing_provider.dart';
-import 'package:fontend/theme/app_theme.dart';
 
 class WritingCheckerScreen extends StatefulWidget {
   const WritingCheckerScreen({Key? key}) : super(key: key);
