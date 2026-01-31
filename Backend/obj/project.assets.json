@@ -3401,31 +3401,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Phong\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/root/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Nam3\\code_laptrinhmobile\\FIT4102-Project_Magic_English\\Backend\\Backend.csproj",
+      "projectUniqueName": "/root/FIT4102-Project_Magic_English/Backend/Backend.csproj",
       "projectName": "Backend",
-      "projectPath": "E:\\Nam3\\code_laptrinhmobile\\FIT4102-Project_Magic_English\\Backend\\Backend.csproj",
-      "packagesPath": "C:\\Users\\Phong\\.nuget\\packages\\",
-      "outputPath": "E:\\Nam3\\code_laptrinhmobile\\FIT4102-Project_Magic_English\\Backend\\obj\\",
+      "projectPath": "/root/FIT4102-Project_Magic_English/Backend/Backend.csproj",
+      "packagesPath": "/root/.nuget/packages/",
+      "outputPath": "/root/FIT4102-Project_Magic_English/Backend/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Phong\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/root/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3438,13 +3431,7 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "10.0.100"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -3508,7 +3495,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.122/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

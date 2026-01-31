@@ -6,8 +6,13 @@ import '../models/writing_model.dart';
 import '../models/stats_model.dart';
 
 class ApiClient {
-  // Development: Use localhost for both web and local
-  static const String baseUrl = 'http://localhost:5181/api';
+// Tự động phát hiện môi trường:
+  // - Nếu đang Debug (chạy máy ảo): Dùng localhost (hoặc 10.0.2.2 cho Android Emulator)
+  // - Nếu là Release (xuất bản): Dùng IP VPS 103.146.122.39
+  static const String baseUrl = kReleaseMode
+      ? 'http://103.146.122.39/api'
+      : 'http://localhost:5181/api'; // Hoặc 'http://10.0.2.2:5181/api' nếu chạy máy ảo Android
+
   static const Duration timeout = Duration(seconds: 30);
 
   static String? _authToken;
