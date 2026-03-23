@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        const SnackBar(content: Text('Vui lòng điền vào tất cả các thông tin')),
       );
       return;
     }
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.of(context).pushReplacementNamed('/home');
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authProvider.error ?? 'Login failed')),
+        SnackBar(content: Text(authProvider.error ?? 'Đăng nhập không thành công')),
       );
     }
   }
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text('Magic English', style: AppTheme.headlineLarge),
                 const SizedBox(height: 8),
                 Text(
-                  'Learn English with AI',
+                  'Học tiếng Anh với AI',
                   style: AppTheme.bodyMedium.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 48),
@@ -101,8 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: AppTheme.bodyLarge,
                   decoration:
                       AppTheme.inputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Enter your password',
+                        labelText: 'Mật khẩu',
+                        hintText: 'Nhập mật khẩu của bạn',
                         prefixIcon: Icons.lock_outlined,
                       ).copyWith(
                         suffixIcon: IconButton(
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : Text('Login', style: AppTheme.buttonText),
+                            : Text('Đăng nhập', style: AppTheme.buttonText),
                       ),
                     );
                   },
@@ -164,13 +164,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account? ", style: AppTheme.bodyMedium),
+                    Text("Không có tài khoản? ", style: AppTheme.bodyMedium),
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).pushNamed('/register');
                       },
                       child: Text(
-                        'Sign up',
+                        'Đăng ký',
                         style: AppTheme.bodyLarge.copyWith(
                           color: AppTheme.primaryGreen,
                           decoration: TextDecoration.underline,

@@ -1,5 +1,8 @@
 import 'package:fit4102_project_magic_english/providers/auth_provider.dart';
 import 'package:fit4102_project_magic_english/providers/stats_provider.dart';
+import 'package:fit4102_project_magic_english/screens/magic_vocab_screen.dart';
+import 'package:fit4102_project_magic_english/screens/stats_screen.dart';
+import 'package:fit4102_project_magic_english/screens/writing_checker_screen.dart';
 import 'package:fit4102_project_magic_english/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +64,7 @@ class DashboardScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Welcome back!', style: AppTheme.bodyMedium),
+                        Text('Chào Mừng Trở Lại!', style: AppTheme.bodyMedium),
                         const SizedBox(height: 4),
                         Text(
                           authProvider.currentUser?.fullName ?? 'User',
@@ -74,7 +77,7 @@ class DashboardScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Keep learning every day to improve your English!',
+                'Hãy tiếp tục học hỏi mỗi ngày để cải thiện tiếng Anh của bạn!',
                 style: AppTheme.bodyMedium,
               ),
             ],
@@ -90,14 +93,14 @@ class DashboardScreen extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Your Progress', style: AppTheme.headlineSmall),
+            Text('Hành Trình Của Bạn', style: AppTheme.headlineSmall),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: _buildStatCard(
                     icon: Icons.library_books,
-                    label: 'Words Learned',
+                    label: 'Từ đã học',
                     value:
                         statsProvider.stats?.totalVocabularyCount.toString() ??
                         '0',
@@ -107,7 +110,7 @@ class DashboardScreen extends StatelessWidget {
                 Expanded(
                   child: _buildStatCard(
                     icon: Icons.local_fire_department,
-                    label: 'Current Streak',
+                    label: 'Chuỗi hiện tại',
                     value: statsProvider.stats?.currentStreak.toString() ?? '0',
                   ),
                 ),
@@ -115,7 +118,7 @@ class DashboardScreen extends StatelessWidget {
                 Expanded(
                   child: _buildStatCard(
                     icon: Icons.star,
-                    label: 'Longest Streak',
+                    label: 'Chuỗi dài nhất',
                     value: statsProvider.stats?.longestStreak.toString() ?? '0',
                   ),
                 ),
@@ -159,36 +162,36 @@ class DashboardScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Features', style: AppTheme.headlineSmall),
+        Text('Tính Năng', style: AppTheme.headlineSmall),
         const SizedBox(height: 16),
         _buildFeatureCard(
           icon: Icons.library_books,
-          title: 'Magic Vocabulary',
+          title: 'Từ vựng ma thuật',
           description:
-              'Learn new words with AI-powered definitions and examples',
+              'Học từ mới với định nghĩa và ví dụ được hỗ trợ bởi trí tuệ nhân tạo.',
           color: Colors.blue,
           onTap: () {
-            // Navigate to vocabulary
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const MagicVocabScreen()));
           },
         ),
         const SizedBox(height: 12),
         _buildFeatureCard(
           icon: Icons.edit_document,
-          title: 'Writing Checker',
-          description: 'Get instant feedback on your English writing',
+          title: 'Viết kiểm tra',
+          description: 'Nhận phản hồi tức thì về bài viết tiếng Anh của bạn',
           color: Colors.orange,
           onTap: () {
-            // Navigate to writing
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const WritingCheckerScreen()));
           },
         ),
         const SizedBox(height: 12),
         _buildFeatureCard(
           icon: Icons.bar_chart,
-          title: 'Statistics',
-          description: 'Track your learning progress and achievements',
+          title: 'Thống kê',
+          description: 'Theo dõi tiến độ học tập và thành tựu của bạn',
           color: Colors.green,
           onTap: () {
-            // Navigate to stats
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const StatsScreen()));
           },
         ),
       ],

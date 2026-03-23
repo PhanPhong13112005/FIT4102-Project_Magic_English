@@ -22,39 +22,47 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
   }
 
   void _checkWriting() async {
-    final text = _writingController.text.trim();
+    final text = _writingController.text.trim(); // Lấy chữ và cắt khoảng trắng 2 đầu
+    
+    // Kiểm tra xem đã nhập gì chưa
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter some text to check')),
+        const SnackBar(content: Text('Vui lòng nhập nội dung trước khi kiểm tra!')),
       );
-      return;
+      return; // Dừng lại không gọi API nữa
     }
 
     setState(() => _isChecking = true);
 
     try {
       final provider = context.read<WritingProvider>();
-      await provider.checkWriting(text);
-      // For demo, create a mock result
+      final result = await provider.checkWriting(_writingController.text.trim());
+      
       setState(() {
         _checkResult = {
-          'score': 85,
-          'errors': [],
-          'suggestions': ['Consider using more diverse vocabulary'],
-          'feedback': 'Good writing! Keep practicing to improve further.',
+          'score': result.score,
+          'errors': result.errors.map((e) => {
+            'type': e.errorType,
+            'message': e.message,
+          }).toList(),
+          'suggestions': result.suggestions.map((s) => 
+            'Thay thế "${s.current}" bằng "${s.suggested}"\nLý do: ${s.reason}'
+          ).toList(),
+          'feedback': result.score >= 80 
+              ? 'Bài viết rất tốt! Hãy tiếp tục phát huy.' 
+              : 'Hãy cố gắng luyện tập thêm để cải thiện kỹ năng nhé!',
         };
         _isChecking = false;
       });
     } catch (e) {
       setState(() => _isChecking = false);
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi kiểm tra bài viết: $e')),
+        );
       }
-    }
-  }
-
+    } 
+  } // Đừng quên dấu ngoặc nhọn đóng hàm này nhé!
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +76,7 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
               backgroundColor: AppTheme.backgroundColor,
               elevation: 0,
               expandedHeight: 0,
-              title: Text('Writing Checker', style: AppTheme.headlineSmall),
+              title: Text('Viết kiểm tra', style: AppTheme.headlineSmall),
             ),
 
             SliverPadding(
@@ -112,9 +120,9 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
                         color: AppTheme.lightText,
                       ),
                       const SizedBox(height: 16),
-                      Text('Write something', style: AppTheme.bodyLarge),
+                      Text('Viết gì đó', style: AppTheme.bodyLarge),
                       Text(
-                        'Enter your text and click Check to improve your writing',
+                        'Nhập nội dung của bạn và nhấn Kiểm tra để cải thiện kỹ năng viết',
                         style: AppTheme.bodyMedium,
                         textAlign: TextAlign.center,
                       ),
@@ -135,7 +143,7 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Your Writing', style: AppTheme.headlineSmall),
+          Text('Bài viết của bạn', style: AppTheme.headlineSmall),
           const SizedBox(height: 16),
 
           // Character count
@@ -143,11 +151,11 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Character count: ${_writingController.text.length}',
+                'Số ký tự: ${_writingController.text.length}',
                 style: AppTheme.labelSmall.copyWith(color: AppTheme.lightText),
               ),
               Text(
-                'Word count: ${_writingController.text.split(' ').length}',
+                'Số từ: ${_writingController.text.split(' ').length}',
                 style: AppTheme.labelSmall.copyWith(color: AppTheme.lightText),
               ),
             ],
@@ -166,7 +174,7 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
               minLines: 6,
               style: AppTheme.bodyLarge,
               decoration: InputDecoration(
-                hintText: 'Write something here... (minimum 10 characters)',
+                hintText: 'Viết gì đó ở đây... (tối thiểu 10 ký tự)',
                 hintStyle: AppTheme.bodyMedium.copyWith(
                   color: AppTheme.lightText,
                 ),
@@ -196,7 +204,7 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
                       ),
                     )
                   : const Icon(Icons.check),
-              label: Text(_isChecking ? 'Checking...' : 'Check Writing'),
+              label: Text(_isChecking ? 'Đang kiểm tra...' : 'Kiểm tra viết'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primaryGreen,
                 disabledBackgroundColor: AppTheme.primaryGreen.withOpacity(0.5),
@@ -221,7 +229,7 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Check Results', style: AppTheme.headlineSmall),
+              Text('Kết quả kiểm tra', style: AppTheme.headlineSmall),
               GestureDetector(
                 onTap: () => setState(() => _checkResult = null),
                 child: Icon(Icons.close, color: AppTheme.darkText),
@@ -244,7 +252,7 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
               child: Column(
                 children: [
                   Text(
-                    'Overall Score',
+                    'Tổng điểm',
                     style: AppTheme.labelSmall.copyWith(
                       color: AppTheme.lightText,
                     ),
@@ -310,7 +318,7 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primaryGreen,
               ),
-              child: const Text('Try Again'),
+              child: const Text('Thử lại'),
             ),
           ),
         ],
@@ -327,7 +335,7 @@ class _WritingCheckerScreenState extends State<WritingCheckerScreen> {
             Icon(Icons.error_outline, color: AppTheme.errorRed, size: 20),
             const SizedBox(width: 8),
             Text(
-              'Errors Found (${errors.length})',
+              'Lỗi được tìm thấy (${errors.length})',
               style: AppTheme.labelSmall.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppTheme.errorRed,

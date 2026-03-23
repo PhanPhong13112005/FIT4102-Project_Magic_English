@@ -34,7 +34,7 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
     if (word.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Please enter a word')));
+      ).showSnackBar(const SnackBar(content: Text('Vui lòng nhập một từ')));
       return;
     }
 
@@ -45,7 +45,7 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Word added successfully!'),
+          content: Text('Từ đã được thêm thành công!'),
           duration: Duration(seconds: 2),
         ),
       );
@@ -65,7 +65,7 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
               backgroundColor: AppTheme.backgroundColor,
               elevation: 0,
               expandedHeight: 0,
-              title: Text('Magic Vocabulary', style: AppTheme.headlineSmall),
+              title: Text('Từ vựng ma thuật', style: AppTheme.headlineSmall),
             ),
 
             SliverPadding(
@@ -76,7 +76,7 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
                   const SizedBox(height: 24),
                   _buildSearchBar(),
                   const SizedBox(height: 24),
-                  Text('Your Vocabulary', style: AppTheme.headlineSmall),
+                  Text('Từ vựng của bạn', style: AppTheme.headlineSmall),
                   const SizedBox(height: 12),
                 ]),
               ),
@@ -107,9 +107,9 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
                             color: AppTheme.lightText,
                           ),
                           const SizedBox(height: 16),
-                          Text('No words yet', style: AppTheme.bodyLarge),
+                          Text('Chưa có từ nào', style: AppTheme.bodyLarge),
                           Text(
-                            'Start adding words to build your vocabulary!',
+                            'Bắt đầu thêm từ để xây dựng từ vựng của bạn!',
                             style: AppTheme.bodyMedium,
                           ),
                         ],
@@ -144,14 +144,14 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Add New Word', style: AppTheme.headlineSmall),
+          Text('Thêm từ mới', style: AppTheme.headlineSmall),
           const SizedBox(height: 16),
           TextField(
             controller: _wordController,
             style: AppTheme.bodyLarge,
             decoration: AppTheme.inputDecoration(
-              labelText: 'Enter a word',
-              hintText: 'e.g., "serendipity"',
+              labelText: 'Nhập một từ',
+              hintText: 'ví dụ: "serendipity"',
               prefixIcon: Icons.language,
             ),
           ),
@@ -162,7 +162,7 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
             child: ElevatedButton.icon(
               onPressed: () => _addVocabulary(context),
               icon: const Icon(Icons.add),
-              label: const Text('Add Word'),
+              label: const Text('Thêm từ'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primaryGreen,
                 shape: RoundedRectangleBorder(
@@ -182,8 +182,8 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
       style: AppTheme.bodyLarge,
       decoration:
           AppTheme.inputDecoration(
-            labelText: 'Search words',
-            hintText: 'Search...',
+            labelText: 'Tìm kiếm từ',
+            hintText: 'Tìm kiếm...',
             prefixIcon: Icons.search,
           ).copyWith(
             suffixIcon: _searchController.text.isNotEmpty
@@ -201,8 +201,8 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
   }
 
   Widget _buildVocabularyCard(dynamic vocab) {
-    final word = vocab.word ?? 'Unknown';
-    final meaning = vocab.meaning ?? 'No definition';
+    final word = vocab.word ?? 'Không xác định';
+    final meaning = vocab.meaning ?? 'Không có định nghĩa';
     final ipa = vocab.ipa ?? '';
     final wordType = vocab.wordType ?? '';
     final cefrLevel = vocab.cefrLevel ?? 'A1';
@@ -253,7 +253,7 @@ class _MagicVocabScreenState extends State<MagicVocabScreen> {
           ),
           const SizedBox(height: 12),
           Text(
-            'Definition',
+            'Định nghĩa',
             style: AppTheme.labelSmall.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 4),

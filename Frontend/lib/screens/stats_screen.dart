@@ -41,7 +41,7 @@ class _StatsScreenState extends State<StatsScreen> {
                   elevation: 0,
                   expandedHeight: 0,
                   title: Text(
-                    'Progress & Achievements',
+                    'Tiến bộ & Thành tựu',
                     style: AppTheme.headlineSmall,
                   ),
                 ),
@@ -59,13 +59,13 @@ class _StatsScreenState extends State<StatsScreen> {
                       const SizedBox(height: 16),
 
                       // Achievements Section
-                      Text('Achievements', style: AppTheme.headlineSmall),
+                      Text('Thành tích', style: AppTheme.headlineSmall),
                       const SizedBox(height: 12),
                       _buildAchievementsSection(),
                       const SizedBox(height: 16),
 
                       // Learning Progress
-                      Text('Learning Progress', style: AppTheme.headlineSmall),
+                      Text('Tiến độ học tập', style: AppTheme.headlineSmall),
                       const SizedBox(height: 12),
                       _buildProgressSection(),
                       const SizedBox(height: 24),
@@ -89,14 +89,14 @@ class _StatsScreenState extends State<StatsScreen> {
         children: [
           _buildStreakItem(
             icon: Icons.local_fire_department,
-            title: 'Current Streak',
+            title: 'Chuỗi Hiện Tại',
             value: '12',
             color: Colors.orange,
           ),
           Container(height: 50, width: 1, color: AppTheme.borderColor),
           _buildStreakItem(
             icon: Icons.trending_up,
-            title: 'Longest Streak',
+            title: 'Chuỗi Dài Nhất',
             value: '28',
             color: AppTheme.primaryGreen,
           ),
@@ -139,7 +139,7 @@ class _StatsScreenState extends State<StatsScreen> {
                 Text('48', style: AppTheme.headlineMedium),
                 const SizedBox(height: 4),
                 Text(
-                  'Words Learned',
+                  'Từ vựng đã học',
                   style: AppTheme.labelSmall.copyWith(
                     color: AppTheme.lightText,
                   ),
@@ -161,7 +161,7 @@ class _StatsScreenState extends State<StatsScreen> {
                 Text('24', style: AppTheme.headlineMedium),
                 const SizedBox(height: 4),
                 Text(
-                  'Writings Done',
+                  'Bài viết đã hoàn thành',
                   style: AppTheme.labelSmall.copyWith(
                     color: AppTheme.lightText,
                   ),
@@ -183,7 +183,7 @@ class _StatsScreenState extends State<StatsScreen> {
                 Text('12h', style: AppTheme.headlineMedium),
                 const SizedBox(height: 4),
                 Text(
-                  'Time Spent',
+                  'Thời gian Học',
                   style: AppTheme.labelSmall.copyWith(
                     color: AppTheme.lightText,
                   ),
@@ -199,17 +199,17 @@ class _StatsScreenState extends State<StatsScreen> {
 
   Widget _buildAchievementsSection() {
     final achievements = [
-      {'icon': '🎯', 'title': 'First Steps', 'description': 'Learned 10 words'},
+      {'icon': '🎯', 'title': 'Bước đầu tiên', 'description': 'Học 10 từ mới'},
       {
         'icon': '🚀',
-        'title': 'Speed Learner',
-        'description': 'Completed 5 sessions in 1 day',
+        'title': 'Học tốc độ',
+        'description': 'Hoàn thành 5 buổi học trong 1 ngày',
       },
-      {'icon': '🏆', 'title': 'Week Warrior', 'description': '7-day streak'},
+      {'icon': '🏆', 'title': 'Tuần chiến binh', 'description': 'chuỗi 7 ngày'},
       {
         'icon': '⭐',
-        'title': 'Perfectionist',
-        'description': '100% accuracy on 5 writings',
+        'title': 'Người cầu toàn',
+        'description': 'Độ chính xác 100% trên 5 bài viết',
       },
     ];
 

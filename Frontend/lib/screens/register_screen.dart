@@ -42,7 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password.isEmpty ||
         confirmPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        const SnackBar(content: Text('Vui lòng điền đầy đủ thông tin vào tất cả các trường.')),
       );
       return;
     }
@@ -50,14 +50,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (password != confirmPassword) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+      ).showSnackBar(const SnackBar(content: Text('Mật khẩu không khớp')));
       return;
     }
 
     if (password.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Password must be at least 6 characters long'),
+          content: Text('Mật khẩu phải có ít nhất 6 ký tự'),
         ),
       );
       return;
@@ -75,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Navigator.of(context).pushReplacementNamed('/home');
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authProvider.error ?? 'Registration failed')),
+        SnackBar(content: Text(authProvider.error ?? 'Đăng ký không thành công')),
       );
     }
   }
@@ -115,10 +115,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 20),
 
                 // Title
-                Text('Create Account', style: AppTheme.headlineLarge),
+                Text('Tạo Tài Khoản', style: AppTheme.headlineLarge),
                 const SizedBox(height: 8),
                 Text(
-                  'Start your English learning journey',
+                  'Bắt đầu hành trình học tiếng Anh của bạn',
                   style: AppTheme.bodyMedium.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 32),
@@ -141,7 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: _fullNameController,
                   style: AppTheme.bodyLarge,
                   decoration: AppTheme.inputDecoration(
-                    labelText: 'Full Name',
+                    labelText: 'Họ và tên',
                     hintText: 'John Doe',
                     prefixIcon: Icons.person_outlined,
                   ),
@@ -153,7 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: _usernameController,
                   style: AppTheme.bodyLarge,
                   decoration: AppTheme.inputDecoration(
-                    labelText: 'Username',
+                    labelText: 'Tên người dùng',
                     hintText: 'johndoe',
                     prefixIcon: Icons.person_outline,
                   ),
@@ -167,8 +167,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: AppTheme.bodyLarge,
                   decoration:
                       AppTheme.inputDecoration(
-                        labelText: 'Password',
-                        hintText: 'At least 6 characters',
+                        labelText: 'Mật khẩu',
+                        hintText: 'Ít nhất 6 ký tự',
                         prefixIcon: Icons.lock_outlined,
                       ).copyWith(
                         suffixIcon: IconButton(
@@ -195,8 +195,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: AppTheme.bodyLarge,
                   decoration:
                       AppTheme.inputDecoration(
-                        labelText: 'Confirm Password',
-                        hintText: 'Re-enter your password',
+                        labelText: 'Xác nhận Mật khẩu',
+                        hintText: 'Nhập lại mật khẩu của bạn',
                         prefixIcon: Icons.lock_outlined,
                       ).copyWith(
                         suffixIcon: IconButton(
@@ -248,7 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : Text('Sign Up', style: AppTheme.buttonText),
+                            : Text('Đăng Ký', style: AppTheme.buttonText),
                       ),
                     );
                   },
@@ -260,7 +260,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already have an account? ',
+                      'Đã có tài khoản? ',
                       style: AppTheme.bodyMedium,
                     ),
                     GestureDetector(
@@ -268,7 +268,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Navigator.of(context).pushReplacementNamed('/login');
                       },
                       child: Text(
-                        'Sign in',
+                        'Đăng nhập',
                         style: AppTheme.bodyLarge.copyWith(
                           color: AppTheme.primaryGreen,
                           decoration: TextDecoration.underline,
