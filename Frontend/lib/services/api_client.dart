@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../core/constants/api_constants.dart';
 import '../models/vocabulary_model.dart';
 import '../models/writing_model.dart';
 import '../models/stats_model.dart';
