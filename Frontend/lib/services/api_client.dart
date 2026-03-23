@@ -6,12 +6,8 @@ import '../models/writing_model.dart';
 import '../models/stats_model.dart';
 
 class ApiClient {
-// Tự động phát hiện môi trường:
-  // - Nếu đang Debug (chạy máy ảo): Dùng localhost (hoặc 10.0.2.2 cho Android Emulator)
-  // - Nếu là Release (xuất bản): Dùng IP VPS 103.146.122.39
-  static const String baseUrl = kReleaseMode
-      ? 'http://103.146.122.39/api'
-      : 'http://localhost:5181/api'; // Hoặc 'http://10.0.2.2:5181/api' nếu chạy máy ảo Android
+  // Ép ứng dụng luôn gọi lên VPS FPT (Bỏ kReleaseMode)
+  static const String baseUrl = 'http://magicenglish.ddns.net/api';
 
   static const Duration timeout = Duration(seconds: 30);
 
