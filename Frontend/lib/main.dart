@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                     : AppTheme.lightText,
               ),
             ),
-            label: 'Vocabulary',
+            label: 'Từ vựng - (Vocabulary)',
           ),
           BottomNavigationBarItem(
             icon: Container(
@@ -218,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                     : AppTheme.lightText,
               ),
             ),
-            label: 'Writing',
+            label: 'Viết - (Writing)',
           ),
           BottomNavigationBarItem(
             icon: Container(
@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                     : AppTheme.lightText,
               ),
             ),
-            label: 'Stats',
+            label: 'Thống kê - (Stats)',
           ),
         ],
       ),

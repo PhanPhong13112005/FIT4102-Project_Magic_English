@@ -48,7 +48,7 @@ class AuthProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print('Error loading stored token: $e');
+      print('Lỗi tải mã thông báo được lưu trữ: $e');
     }
   }
 
