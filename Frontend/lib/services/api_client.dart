@@ -1,17 +1,19 @@
 import 'dart:convert';
 // ignore: depend_on_referenced_packages
+import 'dart:convert';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
+
+// THÊM DÒNG NÀY ĐỂ NHẬN URL TỪ FILE CONSTANTS
+import '../core/constants/api_constants.dart';
+
 import '../models/vocabulary_model.dart';
 import '../models/writing_model.dart';
 import '../models/stats_model.dart';
 
 class ApiClient {
-// Tự động phát hiện môi trường:
-  // - Nếu đang Debug (chạy máy ảo): Dùng localhost (hoặc 10.0.2.2 cho Android Emulator)
-  // - Nếu là Release (xuất bản): Dùng IP VPS 103.146.122.39
-  static const String baseUrl = kReleaseMode
-      ? 'http://103.146.122.39/api'
-      : 'http://localhost:5181/api'; // Hoặc 'http://10.0.2.2:5181/api' nếu chạy máy ảo Android
+  // SỬA DÒNG NÀY: Gọi trực tiếp từ ApiConstants
+  static String get baseUrl => ApiConstants.baseUrl;
 
   static const Duration timeout = Duration(seconds: 30);
 
@@ -20,6 +22,8 @@ class ApiClient {
   static void setToken(String token) {
     _authToken = token;
   }
+
+  // ... (Giữ nguyên toàn bộ phần code từ hàm clearToken() trở xuống) ...
 
   static void clearToken() {
     _authToken = null;

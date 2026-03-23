@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => StatsProvider()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false, // TẮT DẢI BĂNG ĐỎ DEBUG Ở ĐÂY
         title: 'Magic English',
         theme: ThemeData(
           primarySwatch: Colors.green,
