@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/root/FIT4102-Project_Magic_English/Backend/Backend.csproj": {}
+    "E:\\Nam3\\FIT4102-Project_Magic_English\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "/root/FIT4102-Project_Magic_English/Backend/Backend.csproj": {
+    "E:\\Nam3\\FIT4102-Project_Magic_English\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/root/FIT4102-Project_Magic_English/Backend/Backend.csproj",
+        "projectUniqueName": "E:\\Nam3\\FIT4102-Project_Magic_English\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "/root/FIT4102-Project_Magic_English/Backend/Backend.csproj",
-        "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/root/FIT4102-Project_Magic_English/Backend/obj/",
+        "projectPath": "E:\\Nam3\\FIT4102-Project_Magic_English\\Backend\\Backend.csproj",
+        "packagesPath": "C:\\Users\\Phong\\.nuget\\packages\\",
+        "outputPath": "E:\\Nam3\\FIT4102-Project_Magic_English\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/root/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Phong\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -68,6 +73,10 @@
               "target": "Package",
               "version": "[8.15.0, )"
             },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"
@@ -96,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.122/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.417/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

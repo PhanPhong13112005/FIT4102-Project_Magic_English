@@ -33,11 +33,7 @@ builder.Services.AddCors(options =>
 
 // Add DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-        ?? "Data Source=magic_english.db";
-    options.UseSqlite(connectionString);
-});
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
