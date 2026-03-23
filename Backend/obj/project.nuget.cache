@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2+CcwFapa28=",
+  "dgSpecHash": "c6YbCiNJgJs=",
   "success": true,
-  "projectFilePath": "E:\\Nam3\\FIT4102-Project_Magic_English\\Backend\\Backend.csproj",
+  "projectFilePath": "D:\\laptrinhmobile\\FIT4102-Project_Magic_English\\Backend\\Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Phong\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Phong\\.nuget\\packages\\httpclientfactory\\1.0.5\\httpclientfactory.1.0.5.nupkg.sha512",

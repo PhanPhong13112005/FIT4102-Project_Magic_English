@@ -1,7 +1,21 @@
 version: '3.8'
 
 services:
-  # Backend API Service
+  # 1. Cơ sở dữ liệu PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: magic-english-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: magic_english
+    ports:
+      - "5432:5432"
+    networks:
+      - magic-network
+    restart: unless-stopped
+
+  # 2. Backend API Service
   backend:
     build:
       context: ./Backend
@@ -13,44 +27,18 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:5000
-      - ConnectionStrings__DefaultConnection=Data Source=/app/data/magic_english.db
+      # Đã sửa lại ConnectionString trỏ đúng vào CSDL PostgreSQL bên trên
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=magic_english;Username=postgres;Password=password123
       - Ollama__Url=http://ollama:11434
       - Ollama__Model=llama2
-    volumes:
-      - ./Backend/data:/app/data
     depends_on:
+      - db
       - ollama
     networks:
       - magic-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 40s
 
-  # Frontend Web Service
-  frontend:
-    build:
-      context: ./fontend
-      dockerfile: Dockerfile
-    container_name: magic-english-frontend
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
-    networks:
-      - magic-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 10s
-
-  # Ollama AI Service
+  # 3. Ollama AI Service
   ollama:
     image: ollama/ollama:latest
     container_name: magic-english-ollama
@@ -63,8 +51,6 @@ services:
     networks:
       - magic-network
     restart: unless-stopped
-    # Optional: Uncomment if you want to pull a model on startup
-    # command: ollama pull llama2
 
 volumes:
   ollama_data:

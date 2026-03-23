@@ -1,12 +1,12 @@
 import 'dart:convert';
-// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
+import '../core/constants/api_constants.dart';
 import '../models/vocabulary_model.dart';
 import '../models/writing_model.dart';
 import '../models/stats_model.dart';
 
 class ApiClient {
-  // Ép ứng dụng luôn gọi lên VPS FPT (Bỏ kReleaseMode)
+  // Ép ứng dụng luôn gọi lên VPS FPT
   static const String baseUrl = 'http://magicenglish.ddns.net/api';
 
   static const Duration timeout = Duration(seconds: 30);
