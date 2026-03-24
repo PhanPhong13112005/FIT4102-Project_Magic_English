@@ -1,61 +1,29 @@
 version: '3.8'
 
 services:
-  # 1. Cơ sở dữ liệu PostgreSQL
   db:
-    image: postgres:15-alpine
-    container_name: magic-english-db
+    image: postgres:alpine # Dùng bản Alpine để tiết kiệm RAM
+    container_name: magic-postgres-vps
+    restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password123
-      POSTGRES_DB: magic_english
+      POSTGRES_PASSWORD: phanphong123 # Đổi mật khẩu này cho an toàn
+      POSTGRES_DB: MagicEnglishDB
     ports:
       - "5432:5432"
-    networks:
-      - magic-network
-    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Lưu lại data kể cả khi tắt container
 
-  # 2. Backend API Service
   backend:
-    build:
-      context: ./Backend
-      dockerfile: Dockerfile
-    container_name: magic-english-backend
+    build: .
+    container_name: magic-backend-vps
+    restart: always
     ports:
-      - "5000:5000"
-      - "5001:5001"
+      - "5181:8080" # Cổng ra Internet
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:5000
-      # Đã sửa lại ConnectionString trỏ đúng vào CSDL PostgreSQL bên trên
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=magic_english;Username=postgres;Password=password123
-      - Ollama__Url=http://ollama:11434
-      - Ollama__Model=llama2
+      # Chú ý: Host bây giờ là 'db' (tên service ở trên) chứ không phải localhost nữa
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=MagicEnglishDB;Username=postgres;Password=phanphong123
     depends_on:
       - db
-      - ollama
-    networks:
-      - magic-network
-    restart: unless-stopped
-
-  # 3. Ollama AI Service
-  ollama:
-    image: ollama/ollama:latest
-    container_name: magic-english-ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-    environment:
-      - OLLAMA_HOST=0.0.0.0:11434
-    networks:
-      - magic-network
-    restart: unless-stopped
 
 volumes:
-  ollama_data:
-    driver: local
-
-networks:
-  magic-network:
-    driver: bridge
+  pgdata:
