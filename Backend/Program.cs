@@ -20,6 +20,8 @@ if (env == "Docker")
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 // Add CORS
 builder.Services.AddCors(options =>
 {
@@ -60,11 +62,12 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add HttpClient
-builder.Services.AddHttpClient();
+// Đăng ký GeminiService làm trạm trung chuyển AI chính
+builder.Services.AddHttpClient<IGeminiService, GeminiService>();
 
+// Đăng ký WritingService (thằng này giờ chỉ cần tập trung vào chuyên môn IELTS)
+builder.Services.AddScoped<IWritingService, WritingService>();
 // Add Services
-builder.Services.AddScoped<IOllamaService, OllamaService>();
 builder.Services.AddScoped<IVocabularyService, VocabularyService>();
 builder.Services.AddScoped<IWritingService, WritingService>();
 builder.Services.AddScoped<IStatsService, StatsService>();

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Services
 {
+    // 1. Định nghĩa Interface ngay tại đầu file
     public interface IStatsService
     {
         Task<StatsResponse> GetStatsAsync(int userId);
@@ -14,6 +15,7 @@ namespace Backend.Services
         Task UpdateStreakAsync(int userId);
     }
 
+    // 2. Triển khai Class dịch vụ
     public class StatsService : IStatsService
     {
         private readonly AppDbContext _dbContext;
@@ -24,69 +26,73 @@ namespace Backend.Services
         }
 
         public async Task<StatsResponse> GetStatsAsync(int userId)
+{
+    // 1. Đếm trực tiếp từ bảng Vocabularies để luôn chính xác 100%
+    var actualVocabCount = await _dbContext.Vocabularies.CountAsync(v => v.UserId == userId);
+
+    var stats = await _dbContext.UserStats.FirstOrDefaultAsync(s => s.UserId == userId);
+    if (stats == null)
+    {
+        stats = new UserStats
         {
-            var stats = await _dbContext.UserStats.FirstOrDefaultAsync(s => s.UserId == userId);
-            if (stats == null)
+            UserId = userId,
+            TotalVocabularyCount = actualVocabCount,
+            CurrentStreak = 1,
+            LongestStreak = 1,
+            LastActivityDate = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow
+        };
+        _dbContext.UserStats.Add(stats);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    var achievements = GetAchievements(stats);
+
+    return new StatsResponse
+    {
+        // Gán con số thực tế vừa đếm được thay vì lấy số 0 trong DB
+        TotalVocabularyCount = actualVocabCount, 
+        CurrentStreak = stats.CurrentStreak,
+        LongestStreak = stats.LongestStreak,
+        LastActivityDate = stats.LastActivityDate,
+        Achievements = achievements
+    };
+}
+
+    public async Task<DashboardResponse> GetDashboardAsync(int userId)
+    {
+        var stats = await GetStatsAsync(userId);
+
+        var wordTypeDistribution = await _dbContext.Vocabularies
+            .Where(v => v.UserId == userId)
+            .GroupBy(v => v.WordType)
+            .Select(g => new WordTypeDistributionResponse
             {
-                stats = new UserStats
-                {
-                    UserId = userId,
-                    TotalVocabularyCount = 0,
-                    CurrentStreak = 0,
-                    LongestStreak = 0,
-                    LastActivityDate = DateTime.UtcNow,
-                    CreatedAt = DateTime.UtcNow
-                };
-                _dbContext.UserStats.Add(stats);
-                await _dbContext.SaveChangesAsync();
-            }
+                WordType = g.Key,
+                Count = g.Count()
+            })
+            .ToListAsync();
 
-            var achievements = GetAchievements(stats);
-
-            return new StatsResponse
+        // 2. SỬA LỖI LINQ: Lấy dữ liệu về bộ nhớ (AsEnumerable) trước khi sắp xếp
+        var cefrDistribution = (await _dbContext.Vocabularies
+            .Where(v => v.UserId == userId)
+            .GroupBy(v => v.CEFRLevel)
+            .Select(g => new CEFRLevelDistributionResponse
             {
-                TotalVocabularyCount = stats.TotalVocabularyCount,
-                CurrentStreak = stats.CurrentStreak,
-                LongestStreak = stats.LongestStreak,
-                LastActivityDate = stats.LastActivityDate,
-                Achievements = achievements
-            };
-        }
+                Level = g.Key,
+                Count = g.Count()
+            })
+            .ToListAsync()) // Đưa dữ liệu ra khỏi SQL để C# xử lý hàm GetCEFROrderValue
+            .OrderBy(x => GetCEFROrderValue(x.Level))
+            .ToList();
 
-        public async Task<DashboardResponse> GetDashboardAsync(int userId)
+        return new DashboardResponse
         {
-            var stats = await GetStatsAsync(userId);
-
-            // Get word type distribution (user's vocabularies only)
-            var wordTypeDistribution = await _dbContext.Vocabularies
-                .Where(v => v.UserId == userId)
-                .GroupBy(v => v.WordType)
-                .Select(g => new WordTypeDistributionResponse
-                {
-                    WordType = g.Key,
-                    Count = g.Count()
-                })
-                .ToListAsync();
-
-            // Get CEFR level distribution (user's vocabularies only)
-            var cefrDistribution = await _dbContext.Vocabularies
-                .Where(v => v.UserId == userId)
-                .GroupBy(v => v.CEFRLevel)
-                .Select(g => new CEFRLevelDistributionResponse
-                {
-                    Level = g.Key,
-                    Count = g.Count()
-                })
-                .OrderBy(x => GetCEFROrderValue(x.Level))
-                .ToListAsync();
-
-            return new DashboardResponse
-            {
-                Stats = stats,
-                WordTypeDistribution = wordTypeDistribution,
-                CEFRDistribution = cefrDistribution
-            };
-        }
+            Stats = stats,
+            WordTypeDistribution = wordTypeDistribution,
+            CEFRDistribution = cefrDistribution
+        };
+    }
 
         public async Task RecordVocabularyAddedAsync(int userId)
         {
@@ -106,15 +112,10 @@ namespace Backend.Services
             var today = DateTime.UtcNow.Date;
             var lastActivityDate = stats.LastActivityDate.Date;
 
-            if (lastActivityDate == today)
-            {
-                // Already counted today
-                return;
-            }
+            if (lastActivityDate == today) return;
 
             if (lastActivityDate == today.AddDays(-1))
             {
-                // Streak continues
                 stats.CurrentStreak++;
                 if (stats.CurrentStreak > stats.LongestStreak)
                 {
@@ -123,7 +124,6 @@ namespace Backend.Services
             }
             else if (lastActivityDate < today.AddDays(-1))
             {
-                // Streak broken
                 stats.CurrentStreak = 1;
             }
 
@@ -155,7 +155,6 @@ namespace Backend.Services
                 _dbContext.DailyActivities.Add(dailyActivity);
             }
 
-            // Update total vocabulary count for this user
             var stats = await _dbContext.UserStats.FirstOrDefaultAsync(s => s.UserId == userId);
             if (stats == null)
             {
@@ -173,29 +172,18 @@ namespace Backend.Services
             else
             {
                 stats.TotalVocabularyCount = await _dbContext.Vocabularies.Where(v => v.UserId == userId).CountAsync();
-                stats.LastActivityDate = DateTime.UtcNow;
-                stats.UpdatedAt = DateTime.UtcNow;
-
-                // Update streak
                 var lastActivityDate = stats.LastActivityDate.Date;
                 var nowDate = DateTime.UtcNow.Date;
 
                 if (lastActivityDate != nowDate)
                 {
-                    if (lastActivityDate == nowDate.AddDays(-1))
-                    {
-                        stats.CurrentStreak++;
-                    }
-                    else
-                    {
-                        stats.CurrentStreak = 1;
-                    }
+                    if (lastActivityDate == nowDate.AddDays(-1)) stats.CurrentStreak++;
+                    else stats.CurrentStreak = 1;
 
-                    if (stats.CurrentStreak > stats.LongestStreak)
-                    {
-                        stats.LongestStreak = stats.CurrentStreak;
-                    }
+                    if (stats.CurrentStreak > stats.LongestStreak) stats.LongestStreak = stats.CurrentStreak;
                 }
+                stats.LastActivityDate = DateTime.UtcNow;
+                stats.UpdatedAt = DateTime.UtcNow;
             }
 
             await _dbContext.SaveChangesAsync();
@@ -203,59 +191,19 @@ namespace Backend.Services
 
         private List<AchievementDto> GetAchievements(UserStats stats)
         {
-            var achievements = new List<AchievementDto>
+            return new List<AchievementDto>
             {
-                new AchievementDto
-                {
-                    Name = "3-Day Learner",
-                    Description = "Complete 3 consecutive days of learning",
-                    RequiredDays = 3,
-                    Unlocked = stats.LongestStreak >= 3
-                },
-                new AchievementDto
-                {
-                    Name = "Week Warrior",
-                    Description = "Complete 7 consecutive days of learning",
-                    RequiredDays = 7,
-                    Unlocked = stats.LongestStreak >= 7
-                },
-                new AchievementDto
-                {
-                    Name = "Month Master",
-                    Description = "Complete 30 consecutive days of learning",
-                    RequiredDays = 30,
-                    Unlocked = stats.LongestStreak >= 30
-                },
-                new AchievementDto
-                {
-                    Name = "100-Word Club",
-                    Description = "Learn 100 new words",
-                    RequiredDays = 0,
-                    Unlocked = stats.TotalVocabularyCount >= 100
-                },
-                new AchievementDto
-                {
-                    Name = "500-Word Elite",
-                    Description = "Learn 500 new words",
-                    RequiredDays = 0,
-                    Unlocked = stats.TotalVocabularyCount >= 500
-                }
+                new AchievementDto { Name = "3-Day Learner", Description = "Học liên tiếp 3 ngày", Unlocked = stats.LongestStreak >= 3 },
+                new AchievementDto { Name = "Week Warrior", Description = "Học liên tiếp 7 ngày", Unlocked = stats.LongestStreak >= 7 },
+                new AchievementDto { Name = "100-Word Club", Description = "Học được 100 từ mới", Unlocked = stats.TotalVocabularyCount >= 100 }
             };
-
-            return achievements;
         }
 
         private int GetCEFROrderValue(string level)
         {
             return level switch
             {
-                "A1" => 1,
-                "A2" => 2,
-                "B1" => 3,
-                "B2" => 4,
-                "C1" => 5,
-                "C2" => 6,
-                _ => 0
+                "A1" => 1, "A2" => 2, "B1" => 3, "B2" => 4, "C1" => 5, "C2" => 6, _ => 0
             };
         }
     }

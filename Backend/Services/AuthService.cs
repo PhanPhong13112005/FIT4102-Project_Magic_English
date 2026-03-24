@@ -42,7 +42,7 @@ namespace Backend.Services
                     return new AuthResponse
                     {
                         Success = false,
-                        Message = "All fields are required"
+                        Message = "Tất cả các trường là bắt buộc"
                     };
                 }
 
@@ -53,7 +53,7 @@ namespace Backend.Services
                     return new AuthResponse
                     {
                         Success = false,
-                        Message = "Email already registered"
+                        Message = "Email đã được đăng ký"
                     };
                 }
 
@@ -64,7 +64,7 @@ namespace Backend.Services
                     return new AuthResponse
                     {
                         Success = false,
-                        Message = "Username already taken"
+                        Message = "Username đã được sử dụng"
                     };
                 }
 
@@ -74,7 +74,7 @@ namespace Backend.Services
                     return new AuthResponse
                     {
                         Success = false,
-                        Message = "Password must be at least 6 characters long"
+                        Message = "Mật khẩu phải có ít nhất 6 ký tự."
                     };
                 }
 
@@ -113,7 +113,7 @@ namespace Backend.Services
                 return new AuthResponse
                 {
                     Success = true,
-                    Message = "User registered successfully",
+                    Message = "Người dùng đã đăng ký thành công",
                     Data = new AuthResponseData
                     {
                         UserId = user.Id,
@@ -131,7 +131,7 @@ namespace Backend.Services
                 return new AuthResponse
                 {
                     Success = false,
-                    Message = "Registration failed"
+                    Message = "Người dùng đã đăng ký thất bại"
                 };
             }
         }
@@ -146,7 +146,7 @@ namespace Backend.Services
                     return new AuthResponse
                     {
                         Success = false,
-                        Message = "Email and password are required"
+                        Message = "Cần có email và mật khẩu."
                     };
                 }
 
@@ -157,7 +157,7 @@ namespace Backend.Services
                     return new AuthResponse
                     {
                         Success = false,
-                        Message = "Invalid email or password"
+                        Message = "Email hoặc mật khẩu không hợp lệ"
                     };
                 }
 
@@ -167,7 +167,7 @@ namespace Backend.Services
                     return new AuthResponse
                     {
                         Success = false,
-                        Message = "User account is disabled"
+                        Message = "Tài khoản người dùng đã bị vô hiệu hóa"
                     };
                 }
 
@@ -177,7 +177,7 @@ namespace Backend.Services
                     return new AuthResponse
                     {
                         Success = false,
-                        Message = "Invalid email or password"
+                        Message = "Email hoặc mật khẩu không hợp lệ"
                     };
                 }
 
@@ -189,7 +189,7 @@ namespace Backend.Services
                 return new AuthResponse
                 {
                     Success = true,
-                    Message = "Login successful",
+                    Message = "Đăng nhập thành công",
                     Data = new AuthResponseData
                     {
                         UserId = user.Id,
@@ -207,7 +207,7 @@ namespace Backend.Services
                 return new AuthResponse
                 {
                     Success = false,
-                    Message = "Login failed"
+                    Message = "Đăng nhập thất bại"
                 };
             }
         }

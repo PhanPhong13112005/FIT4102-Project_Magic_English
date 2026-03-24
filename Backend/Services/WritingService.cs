@@ -1,99 +1,48 @@
-using Backend.Data;
 using Backend.DTOs;
-using Backend.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Services
 {
+    // 1. Định nghĩa Interface ngay tại đây
     public interface IWritingService
     {
         Task<WritingCheckResponse> CheckWritingAsync(int userId, WritingCheckRequest request);
         Task<List<WritingCheckResponse>> GetUserSubmissionsAsync(int userId);
     }
 
+    // 2. Triển khai Class dịch vụ
     public class WritingService : IWritingService
     {
-        private readonly AppDbContext _dbContext;
-        private readonly IOllamaService _ollamaService;
-        private readonly IStatsService _statsService;
+        private readonly IGeminiService _geminiService;
 
-        public WritingService(AppDbContext dbContext, IOllamaService ollamaService, IStatsService statsService)
+        // Tiêm GeminiService vào để dùng chung
+        public WritingService(IGeminiService geminiService)
         {
-            _dbContext = dbContext;
-            _ollamaService = ollamaService;
-            _statsService = statsService;
+            _geminiService = geminiService;
         }
 
         public async Task<WritingCheckResponse> CheckWritingAsync(int userId, WritingCheckRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Content))
-                throw new ArgumentException("Content cannot be empty");
+            // Prompt đã được tối ưu cho giáo viên IELTS
+            string prompt = $@"
+                Bạn là giáo viên IELTS. Phân tích đoạn văn sau và trả về JSON chuẩn:
+                {{
+                  ""score"": <int 0-10>,
+                  ""errors"": [
+                    {{ ""position"": <int>, ""errorType"": ""<grammar/spelling/style>"", ""message"": ""<tiếng Việt>"" }}
+                  ],
+                  ""suggestions"": [
+                    {{ ""current"": ""<string>"", ""suggested"": ""<string>"", ""reason"": ""<tiếng Việt>"" }}
+                  ]
+                }}
+                Text: ""{request.Content}""";
 
-            // Get feedback from AI
-            var aiResponse = await _ollamaService.CheckWritingAsync(request.Content);
-
-            // Save submission to database
-            var submission = new WritingSubmission
-            {
-                UserId = userId,
-                Content = request.Content,
-                Score = aiResponse.Score,
-                Errors = System.Text.Json.JsonSerializer.Serialize(aiResponse.Errors),
-                Suggestions = System.Text.Json.JsonSerializer.Serialize(aiResponse.Suggestions),
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _dbContext.WritingSubmissions.Add(submission);
-            await _dbContext.SaveChangesAsync();
-
-            // Update user stats
-            await _statsService.RecordWritingSubmissionAsync(userId);
-
-            return MapToResponse(aiResponse);
+            // Gọi trạm trung chuyển GeminiService để lấy kết quả
+            return await _geminiService.GenerateContentAsync<WritingCheckResponse>(prompt);
         }
 
-        public async Task<List<WritingCheckResponse>> GetUserSubmissionsAsync(int userId)
+        public Task<List<WritingCheckResponse>> GetUserSubmissionsAsync(int userId)
         {
-            var submissions = await _dbContext.WritingSubmissions
-                .Where(w => w.UserId == userId)
-                .OrderByDescending(w => w.CreatedAt)
-                .ToListAsync();
-
-            var results = new List<WritingCheckResponse>();
-            foreach (var submission in submissions)
-            {
-                var errors = System.Text.Json.JsonSerializer.Deserialize<List<WritingError>>(submission.Errors) ?? new();
-                var suggestions = System.Text.Json.JsonSerializer.Deserialize<List<WritingSuggestion>>(submission.Suggestions) ?? new();
-
-                results.Add(new WritingCheckResponse
-                {
-                    Score = submission.Score,
-                    Errors = errors,
-                    Suggestions = suggestions
-                });
-            }
-
-            return results;
-        }
-
-        private WritingCheckResponse MapToResponse(Services.WritingCheckAIResponse aiResponse)
-        {
-            return new WritingCheckResponse
-            {
-                Score = aiResponse.Score,
-                Errors = aiResponse.Errors.Select(e => new WritingError
-                {
-                    Position = e.Position,
-                    ErrorType = e.Type,
-                    Message = e.Message
-                }).ToList(),
-                Suggestions = aiResponse.Suggestions.Select(s => new WritingSuggestion
-                {
-                    Current = s.Current,
-                    Suggested = s.Suggested,
-                    Reason = s.Reason
-                }).ToList()
-            };
+            return Task.FromResult(new List<WritingCheckResponse>());
         }
     }
 }

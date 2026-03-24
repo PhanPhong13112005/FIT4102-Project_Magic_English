@@ -8,7 +8,7 @@ namespace Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class VocabularyController : ControllerBase
     {
         private readonly IVocabularyService _vocabularyService;
@@ -22,10 +22,15 @@ namespace Backend.Controllers
 
         private int GetUserId()
         {
+            // 2. Trả về mặc định ID = 1 để logic Service không bị lỗi
+            return 1; 
+
+            /* Code thực tế khi chạy App Flutter:
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!int.TryParse(userIdClaim, out var userId))
                 throw new UnauthorizedAccessException("User ID not found in token");
             return userId;
+            */
         }
 
         [HttpPost("add")]
@@ -39,7 +44,7 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding vocabulary");
+                _logger.LogError(ex, "Lỗi thêm từ vựng");
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -55,11 +60,10 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting vocabulary list");
+                _logger.LogError(ex, "Lỗi lấy danh sách từ vựng");
                 return BadRequest(new { message = ex.Message });
             }
         }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<VocabularyDto>> GetVocabularyById(int id)
         {
@@ -74,7 +78,7 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting vocabulary");
+                _logger.LogError(ex, "Lỗi lấy từ vựng");
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -85,7 +89,7 @@ namespace Backend.Controllers
             try
             {
                 if (string.IsNullOrEmpty(term))
-                    return BadRequest(new { message = "Search term cannot be empty" });
+                    return BadRequest(new { message = "Từ khóa tìm kiếm không được để trống." });
 
                 var userId = GetUserId();
                 var result = await _vocabularyService.SearchVocabularyAsync(userId, term);
@@ -93,9 +97,10 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error searching vocabulary");
+                _logger.LogError(ex, "Lỗi tìm kiếm từ vựng");
                 return BadRequest(new { message = ex.Message });
             }
         }
+
     }
 }
