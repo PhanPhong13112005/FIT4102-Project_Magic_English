@@ -40,12 +40,13 @@ git clone [https://github.com/your-username/Magic_English.git](https://github.co
 
 # Khởi chạy toàn bộ dịch vụ (Database, Backend, Frontend Web)
 docker compose up -d --build
+```
 
 Lưu ý: Sau khi khởi chạy, hệ thống sẽ tự động tạo Schema trong PostgreSQL.
 
 ⚙️ Cấu hình hệ thống (Configuration)
 Cập nhật các thông số quan trọng trong file Backend/appsettings.json trước khi chạy:
-
+```bash
 {
   "ConnectionStrings": {
     "DefaultConnection": "Host=magic-postgres-vps;Database=MagicEnglishDB;Username=postgres;Password=your_password;"
@@ -57,9 +58,10 @@ Cập nhật các thông số quan trọng trong file Backend/appsettings.json t
   },
   "GeminiApiKey": "AIzaSyD_DÁN_API_KEY_MỚI_VÀO_ĐÂY"
 }
-
+```
 📂 Cấu trúc thư mục dự án
 
+```bash
 Magic_English/
 ├── Backend/                 # Mã nguồn C# ASP.NET Core
 │   ├── Controllers/         # Các API Endpoints (Auth, Vocab, Stats...)
@@ -73,7 +75,7 @@ Magic_English/
 │   │   └── services/        # API Client kết nối với Backend
 │   └── Dockerfile           # Cấu hình đóng gói Frontend
 └── docker-compose.yml       # Điều phối các dịch vụ hệ thống
-
+```
 📝 Nhật ký bảo trì & Sửa lỗi (Troubleshooting)
 Bảo mật JWT: Khóa bí mật (SecretKey) phải dài ít nhất 32 ký tự để đáp ứng thuật toán HS256.
 
