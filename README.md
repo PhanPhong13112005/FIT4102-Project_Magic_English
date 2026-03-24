@@ -1,253 +1,84 @@
-# Magic English - Complete Guide
+# ✨ Magic English - AI Learning Mentor
 
-Magic English là một ứng dụng all-in-one giúp người tự học tiếng Anh xây dựng thói quen học tập đều đặn thông qua ba module chính:
-
-1. **Magic Vocab** - Quản lý từ vựng thông minh
-2. **Grammar & Style Checker** - Chấm điểm và sửa lỗi viết
-3. **Stats & Streaks** - Theo dõi tiến độ và thành tích
-
-## Cách nhanh nhất: Docker 🐳
-
-Nếu bạn có Docker, chỉ cần một lệnh:
-
-```bash
-# Windows
-setup-docker.bat
-
-# Mac/Linux
-bash setup-docker.sh
-
-# Hoặc trực tiếp
-docker-compose up -d
-```
-
-**Frontend:** http://localhost  
-**Backend API:** http://localhost:5000/swagger  
-**Ollama:** http://localhost:11434
-
-👉 Xem [DOCKER_GUIDE.md](DOCKER_GUIDE.md) để hướng dẫn chi tiết.
-
-## Kiến trúc Ứng dụng
-
-```
-Magic_English/
-├── Backend/                    # C# ASP.NET Core API
-│   ├── Controllers/           # API endpoints
-│   ├── Models/               # Database models
-│   ├── Services/             # Business logic
-│   ├── Data/                 # Database context
-│   ├── DTOs/                 # Data transfer objects
-│   ├── appsettings.json      # Configuration
-│   ├── Dockerfile            # Docker image
-│   └── Program.cs            # Startup configuration
-│
-├── fontend/                    # Flutter Mobile App
-│   ├── lib/
-│   │   ├── main.dart         # Entry point
-│   │   ├── screens/          # UI screens
-│   │   ├── providers/        # State management
-│   │   ├── models/           # Data models
-│   │   └── services/         # API client
-│   ├── Dockerfile            # Docker image
-│   ├── nginx.conf            # Web server config
-│   └── pubspec.yaml          # Dependencies
-│
-├── docker-compose.yml         # Production setup
-├── docker-compose.dev.yml     # Development setup
-├── Makefile                   # Docker commands
-└── setup-docker.sh            # Auto setup script
-```
-
-## Thiết lập Backend (C#)
-
-### Yêu cầu
-
-- .NET 8.0 SDK
-- Visual Studio Code hoặc Visual Studio
-
-### Cài đặt
-
-```bash
-cd Backend
-dotnet restore
-dotnet build
-```
-
-### Cấu hình Ollama API
-
-Chỉnh sửa file `appsettings.json`:
-
-```json
-{
-  "Ollama": {
-    "Url": "http://localhost:11434",
-    "Model": "llama2"
-  },
-  "ConnectionStrings": {
-    "DefaultConnection": "Data Source=magic_english.db"
-  }
-}
-```
-
-### Chạy Backend
-
-```bash
-dotnet run
-```
-
-Backend sẽ chạy tại `http://localhost:5000`
-
-## Thiết lập Frontend (Flutter)
-
-### Yêu cầu
-
-- Flutter SDK 3.10+
-- Android Studio hoặc Xcode (tùy theo nền tảng)
-
-### Cài đặt Dependencies
-
-```bash
-cd fontend
-flutter pub get
-```
-
-### Chỉnh sửa API URL
-
-Nếu backend chạy trên máy khác, cập nhật `lib/services/api_client.dart`:
-
-```dart
-static const String baseUrl = 'http://YOUR_BACKEND_IP:5000/api';
-```
-
-### Chạy ứng dụng
-
-```bash
-# Android
-flutter run -d android
-
-# iOS
-flutter run -d ios
-
-# Web
-flutter run -d chrome
-```
-
-## Tính năng Chi tiết
-
-### 1. Magic Vocab 📚
-
-- **Thêm từ mới**: Nhập từ tiếng Anh, hệ thống tự động lấy:
-  - Định nghĩa tiếng Việt
-  - Phiên âm IPA
-  - Loại từ (noun, verb, adj...)
-  - Câu ví dụ
-  - Cấp độ CEFR (A1-C2)
-- **Xem sổ tay**: Danh sách tất cả từ vựng đã học
-- **Tìm kiếm**: Nhanh chóng tìm từ hoặc định nghĩa
-
-### 2. Grammar & Style Checker ✍️
-
-- **Nhập văn bản**: Gõ hoặc dán câu/đoạn văn
-- **Nhận phản hồi ngay lập tức**:
-  - Điểm số (0-10)
-  - Danh sách lỗi (grammar, spelling, style)
-  - Đề xuất cải thiện chi tiết
-- **Lưu lịch sử**: Xem tất cả các bài kiểm tra trước
-
-### 3. Stats & Streaks 📊
-
-- **Chuỗi ngày học** (Streak):
-  - Current Streak: Số ngày liên tục học
-  - Longest Streak: Kỷ lục cá nhân
-- **Thống kê Tổng quát**:
-  - Tổng số từ vựng đã học
-  - Các thành tích (3-day, 7-day, 30-day streak)
-  - Số lượt viết kiểm tra
-- **Biểu đồ Trực quan**:
-  - Pie chart: Phân bổ loại từ
-  - Bar chart: Phân bổ theo cấp độ CEFR
-
-## API Endpoints
-
-### Vocabulary
-
-- `POST /api/vocabulary/add` - Thêm từ mới
-- `GET /api/vocabulary/list?page=1&pageSize=20` - Danh sách từ
-- `GET /api/vocabulary/{id}` - Chi tiết từ
-- `GET /api/vocabulary/search?term=hello` - Tìm kiếm
-
-### Writing
-
-- `POST /api/writing/check` - Kiểm tra văn bản
-- `GET /api/writing/submissions` - Lịch sử kiểm tra
-
-### Stats
-
-- `GET /api/stats/stats` - Thống kê cá nhân
-- `GET /api/stats/dashboard` - Dashboard đầy đủ
-- `POST /api/stats/update-streak` - Cập nhật chuỗi
-
-## Tích hợp Ollama
-
-Magic English sử dụng Ollama Cloud API cho:
-
-1. **Vocabulary Extraction**: Lấy thông tin từ vựng
-2. **Writing Analysis**: Phân tích và chữa bài viết
-
-### Cài đặt Ollama Local
-
-```bash
-# Download Ollama từ https://ollama.ai
-
-# Pull model
-ollama pull llama2
-
-# Run server
-ollama serve
-```
-
-## Cấu trúc Database
-
-SQLite với các bảng:
-
-- **Vocabularies**: Lưu từ vựng
-- **WritingSubmissions**: Lưu bài kiểm tra viết
-- **UserStats**: Thống kê người dùng
-- **DailyActivities**: Theo dõi hoạt động hàng ngày
-
-## Khắc phục Sự cố
-
-### Backend không kết nối
-
-- Kiểm tra port 5000 có đang chạy: `netstat -an | grep 5000`
-- Kiểm tra CORS được bật trong `Program.cs`
-
-### Ollama không phản hồi
-
-- Đảm bảo Ollama server đang chạy: `ollama serve`
-- Kiểm tra URL trong `appsettings.json`
-
-### Lỗi Database
-
-- Xóa file `magic_english.db` để reset database
-- Chạy lại: `dotnet run`
-
-## Phát triển Thêm
-
-### Thêm tính năng mới
-
-1. Tạo Model trong Backend
-2. Thêm DbSet trong `AppDbContext`
-3. Tạo Service layer
-4. Tạo Controller
-5. Tạo DTO nếu cần
-6. Cập nhật Flutter API Client
-7. Tạo UI Screen trong Flutter
-
-## Liên hệ & Hỗ trợ
-
-Để báo cáo lỗi hoặc yêu cầu tính năng, vui lòng tạo issue hoặc liên hệ trực tiếp.
+**Magic English** là một hệ thống hỗ trợ học tiếng Anh toàn diện, ứng dụng Trí tuệ nhân tạo (**Gemini AI**) để giúp người học xây dựng lộ trình cá nhân hóa và duy trì thói quen học tập bền vững thông qua cơ chế Gamification.
 
 ---
 
-**Chúc bạn học tập hiệu quả với Magic English!** 🚀
+## 🚀 Tính năng cốt lõi
+
+### 1. Magic Vocab (Hành trình từ vựng) 📚
+*   **AI Extraction:** Tự động trích xuất định nghĩa, phiên âm IPA, loại từ và câu ví dụ chỉ từ một từ khóa đầu vào.
+*   **Smart Notebook:** Lưu trữ và quản lý sổ tay từ vựng cá nhân, phân loại theo cấp độ CEFR (A1-C2).
+
+### 2. Writing Checker (Trợ lý viết bài) ✍️
+*   **Phân tích thông minh:** Sử dụng Gemini AI để kiểm tra lỗi ngữ pháp, chính tả và phong cách hành văn.
+*   **Phản hồi chi tiết:** Chấm điểm trên thang 100 và đưa ra các đề xuất sửa đổi cụ thể cho từng loại lỗi.
+
+### 3. Stats & Streaks (Động lực học tập) 📊
+*   **Streak Tracking:** Theo dõi chuỗi ngày học liên tục (Current Streak) và kỷ lục cá nhân (Longest Streak).
+*   **Achievement System:** Hệ thống huy hiệu thực tế dựa trên dữ liệu thật từ Database giúp thúc đẩy tinh thần học tập.
+
+---
+
+## 🛠️ Công nghệ sử dụng
+
+*   **Frontend:** Flutter (Quản lý trạng thái với Provider).
+*   **Backend:** ASP.NET Core 8.0 (Web API).
+*   **Database:** PostgreSQL (Hệ quản trị cơ sở dữ liệu mạnh mẽ).
+*   **AI Engine:** Google Gemini AI (Thay thế cho các mô hình chạy local để tối ưu hiệu suất).
+*   **Infrastructure:** Docker, Docker Compose, Nginx.
+
+---
+
+## 📦 Triển khai nhanh với Docker 🐳
+
+Dự án đã được cấu hình sẵn để triển khai nhanh chóng trên VPS hoặc máy cục bộ.
+
+```bash
+# Clone dự án từ repository
+git clone [https://github.com/your-username/Magic_English.git](https://github.com/your-username/Magic_English.git)
+
+# Khởi chạy toàn bộ dịch vụ (Database, Backend, Frontend Web)
+docker compose up -d --build
+
+Lưu ý: Sau khi khởi chạy, hệ thống sẽ tự động tạo Schema trong PostgreSQL.
+
+⚙️ Cấu hình hệ thống (Configuration)
+Cập nhật các thông số quan trọng trong file Backend/appsettings.json trước khi chạy:
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=magic-postgres-vps;Database=MagicEnglishDB;Username=postgres;Password=your_password;"
+  },
+  "JwtSettings": {
+    "SecretKey": "PhanPhong_MagicEnglish_SecretKey_2026_Strong_Security",
+    "Issuer": "MagicEnglish",
+    "Audience": "MagicEnglishUsers"
+  },
+  "GeminiApiKey": "AIzaSyD_DÁN_API_KEY_MỚI_VÀO_ĐÂY"
+}
+
+📂 Cấu trúc thư mục dự án
+
+Magic_English/
+├── Backend/                 # Mã nguồn C# ASP.NET Core
+│   ├── Controllers/         # Các API Endpoints (Auth, Vocab, Stats...)
+│   ├── Services/            # Logic xử lý chính và kết nối Gemini AI
+│   ├── Models/              # Định nghĩa thực thể Database
+│   └── Dockerfile           # Cấu hình đóng gói Backend
+├── fontend/                 # Mã nguồn Flutter Mobile/Web
+│   ├── lib/
+│   │   ├── providers/       # State Management (Logic dữ liệu thật)
+│   │   ├── screens/         # Giao diện người dùng (UI)
+│   │   └── services/        # API Client kết nối với Backend
+│   └── Dockerfile           # Cấu hình đóng gói Frontend
+└── docker-compose.yml       # Điều phối các dịch vụ hệ thống
+
+📝 Nhật ký bảo trì & Sửa lỗi (Troubleshooting)
+Bảo mật JWT: Khóa bí mật (SecretKey) phải dài ít nhất 32 ký tự để đáp ứng thuật toán HS256.
+
+Kết nối Database: Khi chạy trong Docker, chuỗi kết nối phải dùng tên dịch vụ magic-postgres-vps thay vì localhost.
+
+Gemini API Key: Đảm bảo Key không bị lộ trên các nền tảng công cộng để tránh bị Google thu hồi (Leaked Key).
+
+Phát triển bởi nhóm 11 CNTT17-08 - 2026 🚀
